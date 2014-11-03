@@ -10,9 +10,11 @@
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
-@property (nonatomic, weak) IBOutlet NSLevelIndicator *levelIndicator;
+@property (nonatomic, weak) IBOutlet NSProgressIndicator *progressIndicator;
 @property (nonatomic, weak) IBOutlet NSTextField *textField;
 @property (nonatomic, weak) IBOutlet NSButton *button;
+@property (nonatomic, weak) IBOutlet NSSlider *slider;
+@property (nonatomic, weak) IBOutlet NSTextField *formatTextField;
 
 @end
 

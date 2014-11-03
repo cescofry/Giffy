@@ -12,11 +12,12 @@
 
 typedef NS_ENUM(NSUInteger, ButtonStatus) {
     ButtonStatusOpen,
+    ButtonStatusStart,
     ButtonStatusCancel,
     ButtonStatusView
 };
 
-static NSUInteger maxNumberOfSections = 10;
+static NSUInteger maxNumberOfSections = 20;
 
 @interface AppDelegate () <GifExporterDelegate>
 
@@ -29,9 +30,10 @@ static NSUInteger maxNumberOfSections = 10;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
-    self.levelIndicator.maxValue = maxNumberOfSections;
-    self.levelIndicator.floatValue = 0.0;
+    
+    [self resetProgressIndicator];
     [self changeButtonStatus:ButtonStatusOpen];
+
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
@@ -44,7 +46,6 @@ static NSUInteger maxNumberOfSections = 10;
     GifExporter *exporter = [GifExporter new];
     exporter.delegate = self;
     exporter.frameRate = 24;
-    exporter.scale = 0.2;
 
     return exporter;
 }
@@ -54,8 +55,7 @@ static NSUInteger maxNumberOfSections = 10;
 - (void)openDialog
 {
     
-    self.levelIndicator.maxValue = maxNumberOfSections;
-    self.levelIndicator.floatValue = 0.0;
+    [self resetProgressIndicator];
     
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     [panel setAllowsMultipleSelection:NO];
@@ -77,14 +77,21 @@ static NSUInteger maxNumberOfSections = 10;
             NSURL *saveURL = [[directory URLByDeletingLastPathComponent] URLByAppendingPathComponent:fileName];
             
             self.currentExporter.saveLocation = saveURL;
-            [self.currentExporter execute];
+            [self resetSlider];
             
-            [self changeButtonStatus:ButtonStatusCancel];
+            [self changeButtonStatus:ButtonStatusStart];
         }
         else {
             [self cancel];
         }
     }];
+}
+
+- (void)start
+{
+    [self.currentExporter execute];
+    [self.progressIndicator startAnimation:self];
+    [self changeButtonStatus:ButtonStatusCancel];
 }
 
 - (void)cancel
@@ -102,10 +109,20 @@ static NSUInteger maxNumberOfSections = 10;
 
 - (void)changeButtonStatus:(ButtonStatus)status
 {
+    [self.slider setEnabled:NO];
+    [self.formatTextField setEnabled:NO];
+    
     NSString *statusString;
     switch (status) {
         case ButtonStatusOpen:
             statusString = @"Open";
+            [self.textField setStringValue:@"Seelct a folder"];
+            break;
+        case ButtonStatusStart:
+            statusString = @"Start";
+            [self.slider setEnabled:YES];
+            [self.formatTextField setEnabled:YES];
+            [self sliderDidChange:self.slider];
             break;
         case ButtonStatusCancel:
             statusString = @"Cancel";
@@ -123,9 +140,14 @@ static NSUInteger maxNumberOfSections = 10;
 
 - (IBAction)didTapButton:(NSButton *)sender
 {
+    
     switch (sender.tag) {
         case ButtonStatusOpen:
             [self openDialog];
+           
+            break;
+        case ButtonStatusStart:
+            [self start];
             break;
         case ButtonStatusCancel:
             [self cancel];
@@ -138,6 +160,35 @@ static NSUInteger maxNumberOfSections = 10;
     }
 }
 
+#pragma mark - format
+
+- (void)resetSlider
+{
+    self.slider.maxValue = 2.0;
+    self.slider.minValue = 0.1;
+    self.slider.floatValue = 1.0;
+    
+    [self sliderDidChange:self.slider];
+}
+
+- (IBAction)sliderDidChange:(NSSlider *)sender
+{
+    CGSize format = [self.currentExporter originalFormat];
+    CGSize newFormat = CGSizeMake(format.width * sender.floatValue, format.height * sender.floatValue);
+    self.formatTextField.stringValue = [NSString stringWithFormat:@"%.0f x %.0f", newFormat.width, newFormat.height];
+    
+    self.currentExporter.format = newFormat;
+}
+
+- (void)resetProgressIndicator
+{
+    self.progressIndicator.maxValue = maxNumberOfSections;
+    self.progressIndicator.doubleValue = 0.0;
+    [self.progressIndicator stopAnimation:self];
+    [self.progressIndicator setIndeterminate:NO];
+    
+}
+
 #pragma mark - exporter
 
 - (void)gifExporter:(GifExporter *)exporter processedImage:(NSImage *)image index:(NSUInteger)index outOfTotal:(NSUInteger)total
@@ -146,7 +197,12 @@ static NSUInteger maxNumberOfSections = 10;
     
     
     float value = ((float) maxNumberOfSections / total) * (index + 1);
-    [self.levelIndicator setFloatValue:value];
+    [self.progressIndicator setDoubleValue:value];
+}
+
+- (void)gifExporterIsProcessing:(GifExporter *)exporter
+{
+    [self.textField setStringValue:@"Processing"];
 }
 
 - (void)gifExporterFinished:(GifExporter *)exporter

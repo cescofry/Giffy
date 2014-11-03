@@ -16,10 +16,12 @@
 @property (nonatomic, strong) NSURL *imagesLocation;
 @property (nonatomic, assign) NSUInteger frameRate;
 @property (nonatomic, strong) NSURL *saveLocation;
-@property (nonatomic, assign) CGFloat scale;
+@property (nonatomic, assign) CGSize format;
 @property (nonatomic, assign, readonly) BOOL isExecuting;
 
 @property (nonatomic, assign) id<GifExporterDelegate> delegate;
+
+- (CGSize)originalFormat;
 
 - (void)execute;
 - (void)cancel;
@@ -30,6 +32,7 @@
 @protocol GifExporterDelegate <NSObject>
 
 - (void)gifExporter:(GifExporter *)exporter processedImage:(NSImage *)image index:(NSUInteger)index outOfTotal:(NSUInteger)total;
+- (void)gifExporterIsProcessing:(GifExporter *)exporter;
 - (void)gifExporterFinished:(GifExporter *)exporter;
 
 @end

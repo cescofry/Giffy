@@ -34,13 +34,18 @@
     return 1.0 / rate;
 }
 
-- (CGFloat)scale
+- (CGSize)format
 {
-    if (_scale <= 0.01) {
-        _scale = 1.0;
+    if (_format.width <= 0.0 || _format.height <= 0.0) {
+        _format = self.originalFormat;
     }
     
-    return _scale;
+    return _format;
+}
+
+- (CGSize)originalFormat
+{
+    return [(NSImage *)[self.images firstObject] size];
 }
 
 
@@ -95,6 +100,14 @@
             
         }];
         
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            if ([self.delegate respondsToSelector:@selector(gifExporterIsProcessing:)]) {
+                [self.delegate gifExporterIsProcessing:self];
+            }
+        });
+        
+        self.images = nil;
+        
         if (self.isCancelled) {
             return;
         }
@@ -119,14 +132,11 @@
 
 - (NSImage *)scaleImage:(NSImage *)image
 {
-    
-    NSSize size = NSMakeSize(image.size.width * self.scale, image.size.height * self.scale);
-    
-    NSImage *smallImage = [[NSImage alloc] initWithSize:size];
+    NSImage *smallImage = [[NSImage alloc] initWithSize:self.format];
     [smallImage lockFocus];
-    [image setSize: size];
+    [image setSize: self.format];
     [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
-    [image drawAtPoint:NSZeroPoint fromRect:CGRectMake(0, 0, size.width, size.height) operation:NSCompositeCopy fraction:1.0];
+    [image drawAtPoint:NSZeroPoint fromRect:CGRectMake(0, 0, self.format.width, self.format.height) operation:NSCompositeCopy fraction:1.0];
     [smallImage unlockFocus];
     
     return smallImage;

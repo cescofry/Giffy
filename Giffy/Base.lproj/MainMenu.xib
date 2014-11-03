@@ -14,7 +14,9 @@
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
                 <outlet property="button" destination="spE-RH-TGC" id="dv9-9S-BFS"/>
-                <outlet property="levelIndicator" destination="B37-Sp-MXs" id="a7U-JW-x1d"/>
+                <outlet property="formatTextField" destination="LPG-FB-fyE" id="qXT-v7-kUK"/>
+                <outlet property="progressIndicator" destination="olM-kW-Tce" id="tlq-op-Y23"/>
+                <outlet property="slider" destination="OxB-FA-Z10" id="D5L-Wo-OaL"/>
                 <outlet property="textField" destination="dqa-1f-f5z" id="FWU-Kc-FBg"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
@@ -673,7 +675,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="480" height="192"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <value key="minSize" type="size" width="480" height="150"/>
             <value key="maxSize" type="size" width="480" height="150"/>
             <view key="contentView" id="EiT-Mj-1SZ">
@@ -698,21 +700,41 @@
                             <action selector="didTapButton:" target="Voe-Tx-rLC" id="QHj-N7-2aF"/>
                         </connections>
                     </button>
-                    <levelIndicator verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="B37-Sp-MXs">
-                        <rect key="frame" x="22" y="124" width="440" height="18"/>
-                        <levelIndicatorCell key="cell" alignment="left" doubleValue="4" maxValue="10" warningValue="2" criticalValue="2" id="RxC-Mb-U0U"/>
-                    </levelIndicator>
+                    <slider verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OxB-FA-Z10">
+                        <rect key="frame" x="20" y="22" width="150" height="21"/>
+                        <sliderCell key="cell" continuous="YES" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="4PO-d1-vU8"/>
+                        <connections>
+                            <action selector="sliderDidChange:" target="Voe-Tx-rLC" id="pn6-YL-vbd"/>
+                        </connections>
+                    </slider>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LPG-FB-fyE">
+                        <rect key="frame" x="20" y="49" width="114" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Format" id="1sv-Lo-1wR">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            <connections>
+                                <outlet property="representedObject" destination="EiT-Mj-1SZ" id="awg-Um-TaA"/>
+                            </connections>
+                        </textFieldCell>
+                    </textField>
+                    <progressIndicator ambiguous="YES" misplaced="YES" maxValue="100" doubleValue="11" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="olM-kW-Tce">
+                        <rect key="frame" x="20" y="123" width="440" height="20"/>
+                    </progressIndicator>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="spE-RH-TGC" secondAttribute="trailing" constant="18" id="6y4-8x-e2N"/>
                     <constraint firstItem="dqa-1f-f5z" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" symbolic="YES" id="BD7-HZ-kM1"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="dqa-1f-f5z" secondAttribute="trailing" constant="20" symbolic="YES" id="CGw-fG-tP1"/>
                     <constraint firstItem="dqa-1f-f5z" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="HXY-Qn-g2h"/>
-                    <constraint firstAttribute="trailing" secondItem="B37-Sp-MXs" secondAttribute="trailing" constant="18" id="Ji4-uV-vxY"/>
-                    <constraint firstItem="B37-Sp-MXs" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="22" id="UMR-wf-p7b"/>
-                    <constraint firstItem="B37-Sp-MXs" firstAttribute="top" secondItem="dqa-1f-f5z" secondAttribute="bottom" constant="13" id="WBb-A8-VKB"/>
+                    <constraint firstItem="LPG-FB-fyE" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="Niv-u8-U4Q"/>
+                    <constraint firstItem="olM-kW-Tce" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="RSd-cv-2ud"/>
+                    <constraint firstAttribute="bottom" secondItem="OxB-FA-Z10" secondAttribute="bottom" constant="24" id="TZL-Cl-li6"/>
+                    <constraint firstItem="olM-kW-Tce" firstAttribute="top" secondItem="dqa-1f-f5z" secondAttribute="bottom" constant="13" id="ggN-sx-Hxw"/>
                     <constraint firstAttribute="bottom" secondItem="spE-RH-TGC" secondAttribute="bottom" constant="20" id="iRF-bu-iqj"/>
                     <constraint firstAttribute="trailing" secondItem="dqa-1f-f5z" secondAttribute="trailing" constant="20" id="sYj-yF-HGC"/>
+                    <constraint firstItem="OxB-FA-Z10" firstAttribute="top" secondItem="LPG-FB-fyE" secondAttribute="bottom" constant="8" symbolic="YES" id="tTu-dz-wa5"/>
+                    <constraint firstItem="OxB-FA-Z10" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="tnj-Is-Dg8"/>
                 </constraints>
             </view>
             <point key="canvasLocation" x="566" y="379"/>

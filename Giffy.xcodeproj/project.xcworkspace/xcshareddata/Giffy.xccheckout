@@ -10,22 +10,26 @@
 	<string>Giffy</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>4FFAA870B2E191BC8057EF69AE02D5BEBB657408</key>
+		<string>github.com:cescofry/Giffy.git</string>
 		<key>F92A57FBC8DD928214666C9506FC50A7DB82EAF5</key>
 		<string>https://github.com/mttrb/BeaconOSX.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Giffy/Giffy.xcodeproj</string>
+	<string>Giffy.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
+		<key>4FFAA870B2E191BC8057EF69AE02D5BEBB657408</key>
+		<string>../..</string>
 		<key>F92A57FBC8DD928214666C9506FC50A7DB82EAF5</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/mttrb/BeaconOSX.git</string>
+	<string>github.com:cescofry/Giffy.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>F92A57FBC8DD928214666C9506FC50A7DB82EAF5</string>
+	<string>4FFAA870B2E191BC8057EF69AE02D5BEBB657408</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
@@ -34,7 +38,15 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>F92A57FBC8DD928214666C9506FC50A7DB82EAF5</string>
 			<key>IDESourceControlWCCName</key>
-			<string>tests</string>
+			<string></string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4FFAA870B2E191BC8057EF69AE02D5BEBB657408</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Giffy</string>
 		</dict>
 	</array>
 </dict>
