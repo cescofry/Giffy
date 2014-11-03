@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ImageDiscover.h"
+#import "VideoExtractor.h"
 #import "GifExporter.h"
 
 typedef NS_ENUM(NSUInteger, ButtonStatus) {
@@ -61,12 +62,19 @@ static NSUInteger maxNumberOfSections = 20;
     [panel setAllowsMultipleSelection:NO];
     [panel setAllowsOtherFileTypes:NO];
     [panel setCanChooseDirectories:YES];
-    [panel setCanChooseFiles:NO];
+    [panel setCanChooseFiles:YES];
     
     [panel beginWithCompletionHandler:^(NSInteger result) {
         NSURL *directory = [[panel URLs] firstObject];
         if (directory) {
-            NSArray *images = [ImageDiscover imagesInFolder:directory];
+            
+            
+            NSArray *images = [VideoExtractor imagesFromVideoURL:directory];
+           
+            if (!images) {
+                images = [ImageDiscover imagesInFolder:directory];
+            }
+            
 
             [self.currentExporter cancel];
             self.currentExporter = [self defaultExporter];
