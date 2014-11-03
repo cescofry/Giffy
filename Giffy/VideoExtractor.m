@@ -11,38 +11,53 @@
 
 @implementation VideoExtractor
 
-+ (NSArray *)imagesFromVideoURL:(NSURL *)url
++ (BOOL)canExportFromURL:(NSURL *)url
+{
+    return [QTMovie canInitWithURL:url];
+}
+
++ (void)imagesFromVideoURL:(NSURL *)url complition:(VideoExtractorComplition)complition
+{
+    return [self imagesFromVideoURL:url framesPerSecond:24 complition:complition];
+}
+
++ (void)imagesFromVideoURL:(NSURL *)url framesPerSecond:(NSUInteger)frames complition:(VideoExtractorComplition)complition
 {
     
-    if (![QTMovie canInitWithURL:url]) {
+    if (![QTMovie canInitWithURL:url] && complition) {
         NSLog(@"CAnnnot open file at URL %@", url.absoluteString);
-        return nil;
+        complition(nil);
+        return;
     }
     
-    NSError *error;
-    QTMovie *movie = [QTMovie movieWithURL:url error:&error];
-    
-    
-    double duration = movie.duration.timeValue;
-    double index = 0.0;
-    
-    NSMutableArray *images = [NSMutableArray array];
-    while (index <= duration) {
-        QTTime time = QTMakeTime(index, 1.0);
-        NSImage *image = [movie frameImageAtTime:time];
+    dispatch_queue_t queue = dispatch_queue_create("com.ziofrtiz.videoExtractor", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_async(queue, ^{
+        NSError *error;
+        QTMovie *movie = [QTMovie movieWithURL:url error:&error];
         
-        if (image) {
-            [images addObject:image];
-            index += 0.2;
+        
+        double duration = movie.duration.timeValue;
+        double index = 0.0;
+        double advancing = 1.0 / frames;
+        
+        NSMutableArray *images = [NSMutableArray array];
+        while (index <= duration) {
+            QTTime time = QTMakeTime(index, 1.0);
+            NSImage *image = [movie frameImageAtTime:time];
+            
+            if (image) {
+                [images addObject:image];
+                index += advancing;
+            }
+            else {
+                index += duration;
+            }
         }
-        else {
-            index += duration;
+        
+        if (complition) {
+            complition([images copy]);
         }
-        
-        
-    }
-    
-    return  [images copy];
+    });
 }
 
 @end

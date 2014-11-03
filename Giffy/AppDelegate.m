@@ -68,31 +68,42 @@ static NSUInteger maxNumberOfSections = 20;
         NSURL *directory = [[panel URLs] firstObject];
         if (directory) {
             
-            
-            NSArray *images = [VideoExtractor imagesFromVideoURL:directory];
-           
-            if (!images) {
-                images = [ImageDiscover imagesInFolder:directory];
+            if ([VideoExtractor canExportFromURL:directory]) {
+                [self.progressIndicator setDoubleValue:self.progressIndicator.maxValue];
+                [self.progressIndicator setIndeterminate:YES];
+                [self.progressIndicator startAnimation:self];
+                [VideoExtractor imagesFromVideoURL:directory framesPerSecond:24 complition:^(NSArray *images) {
+                    [self resetProgressIndicator];
+                    [self saveImages:images atURL:directory];
+                }];
+            }
+            else {
+                NSArray *images = [ImageDiscover imagesInFolder:directory];
+                [self saveImages:images atURL:directory];
             }
             
-
-            [self.currentExporter cancel];
-            self.currentExporter = [self defaultExporter];
-
-            self.currentExporter.images = images;
-            
-            NSString *fileName = [NSString stringWithFormat:@"%@.gif", [directory lastPathComponent]];
-            NSURL *saveURL = [[directory URLByDeletingLastPathComponent] URLByAppendingPathComponent:fileName];
-            
-            self.currentExporter.saveLocation = saveURL;
-            [self resetSlider];
-            
-            [self changeButtonStatus:ButtonStatusStart];
+           
         }
         else {
             [self cancel];
         }
     }];
+}
+
+- (void)saveImages:(NSArray *)images atURL:(NSURL *)url
+{
+    [self.currentExporter cancel];
+    self.currentExporter = [self defaultExporter];
+    
+    self.currentExporter.images = images;
+    
+    NSString *fileName = [NSString stringWithFormat:@"%@.gif", [url lastPathComponent]];
+    NSURL *saveURL = [[url URLByDeletingLastPathComponent] URLByAppendingPathComponent:fileName];
+    
+    self.currentExporter.saveLocation = saveURL;
+    [self resetSlider];
+    
+    [self changeButtonStatus:ButtonStatusStart];
 }
 
 - (void)start

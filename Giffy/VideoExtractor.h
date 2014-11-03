@@ -8,8 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+typedef void(^VideoExtractorComplition)(NSArray *);
+
 @interface VideoExtractor : NSObject
 
-+ (NSArray *)imagesFromVideoURL:(NSURL *)url;
++ (BOOL)canExportFromURL:(NSURL *)url;
++ (void)imagesFromVideoURL:(NSURL *)url complition:(VideoExtractorComplition)complition;
++ (void)imagesFromVideoURL:(NSURL *)url framesPerSecond:(NSUInteger)frames complition:(VideoExtractorComplition)complition;
 
 @end
