@@ -13,6 +13,5 @@
 
 - (instancetype)initWithVideoURL:(NSURL *)url;
 - (instancetype)initWithVideoURL:(NSURL *)url framesPerSecond:(NSUInteger)frames;
-- (NSUInteger)count;
 
 @end

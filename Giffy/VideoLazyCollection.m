@@ -13,6 +13,7 @@
 @interface VideoLazyCollection ()
 
 @property (nonatomic, strong) AVAssetImageGenerator *imageGenerator;
+@property (nonatomic, assign) NSUInteger index;
 @property (nonatomic, assign) CMTime currentTime;
 @property (nonatomic, assign) CMTime progressTime;
 
@@ -48,6 +49,7 @@
         
         self.count = (NSUInteger)(CMTimeGetSeconds(asset.duration) / CMTimeGetSeconds(self.progressTime));
         self.format = [[self imageAtTime:self.currentTime] size];
+        self.index = 0;
     }
     
     return self;
@@ -62,11 +64,6 @@
 
 - (NSImage *)imageAtTime:(CMTime)time
 {
-    
-    if (time.value > self.imageGenerator.asset.duration.value) {
-        return nil;
-    }
-    
     NSError *error = nil;
     CGImageRef imgRef = [self.imageGenerator copyCGImageAtTime:time actualTime:NULL error:&error];
     NSImage *image = [[NSImage alloc] initWithCGImage:imgRef size:NSZeroSize];
@@ -77,10 +74,14 @@
 
 - (id)nextObject
 {
+    
+    if (self.index >= self.count) {
+        return nil;
+    }
+    self.index++;
+    
     NSImage *image = [self imageAtTime:self.currentTime];
     self.currentTime = CMTimeAdd(self.currentTime, self.progressTime);
-    
-    NSLog(@"current time: %lld, %d", self.currentTime.value, self.currentTime.timescale);
     
     return image;
 }

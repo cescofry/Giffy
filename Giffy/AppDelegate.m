@@ -68,7 +68,7 @@ static NSUInteger maxNumberOfSections = 20;
         NSURL *directory = [[panel URLs] firstObject];
         if (directory) {
             
-            AbstractLazyCollection *collection = [[VideoLazyCollection alloc] initWithVideoURL:directory framesPerSecond:12];
+            AbstractLazyCollection *collection = [[VideoLazyCollection alloc] initWithVideoURL:directory framesPerSecond:24];
             if (!collection) {
                 collection = [[FolderLazyCollection alloc] initWithFolderURL:directory];
             }
