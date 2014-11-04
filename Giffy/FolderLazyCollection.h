@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AbstractLazyCollection.h"
 
-@interface ImageDiscover : NSObject
-
-+ (NSArray *)imagesInFolder:(NSURL *)fodlerURL;
+@interface FolderLazyCollection : AbstractLazyCollection
+- (instancetype)initWithFolderURL:(NSURL *)url;
 
 @end

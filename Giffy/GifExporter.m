@@ -7,11 +7,13 @@
 //
 
 #import "GifExporter.h"
+#import "AbstractLazyCollection.h"
 #import <AppKit/AppKit.h>
 #import <ImageIO/ImageIO.h>
 
 @interface GifExporter ()
 
+@property (nonatomic, strong, readwrite) AbstractLazyCollection *imagesEnumerator;
 @property (nonatomic, assign, readwrite) BOOL isExecuting;
 @property (nonatomic, assign) BOOL isCancelled;
 
@@ -19,12 +21,15 @@
 
 @implementation GifExporter
 
-- (NSArray *)images
+
+- (instancetype)initWithImagesEnumerator:(AbstractLazyCollection *)enumerator
 {
-    if (!_images) {
-        // get all images in folder
+    self = [self init];
+    if (self) {
+        self.imagesEnumerator = enumerator;
     }
-    return _images;
+    
+    return self;
 }
 
 - (float)frameLength
@@ -45,17 +50,13 @@
 
 - (CGSize)originalFormat
 {
-    return [(NSImage *)[self.images firstObject] size];
+    return [self.imagesEnumerator format];
 }
 
 
 
 - (void)execute
 {
- 
-    if (!self.saveLocation || self.images.count == 0 || [self frameLength] <= 0.0) {
-        return;
-    }
     
     if (self.isExecuting) {
         return;
@@ -65,21 +66,23 @@
     
     dispatch_queue_t queue = dispatch_queue_create("com.ziofrtiz.exporter", DISPATCH_QUEUE_CONCURRENT);
     dispatch_async(queue, ^{
-        CGImageDestinationRef destination = CGImageDestinationCreateWithURL((CFURLRef)self.saveLocation,
+        NSUInteger total = self.imagesEnumerator.count;
+        CGImageDestinationRef destination = CGImageDestinationCreateWithURL((__bridge CFURLRef)self.saveLocation,
                                                                             kUTTypeGIF,
-                                                                            self.images.count,
+                                                                            total,
                                                                             NULL);
         NSDictionary *frameProperties = @{(NSString *)kCGImagePropertyGIFDictionary : @{(NSString *)kCGImagePropertyGIFDelayTime : @([self frameLength])}};
         NSDictionary *gifProperties = @{(NSString *)kCGImagePropertyGIFDictionary : @{(NSString *)kCGImagePropertyGIFLoopCount : @0}};
         
-        NSUInteger total = self.images.count;
         
-        [self.images enumerateObjectsUsingBlock:^(NSImage *image, NSUInteger idx, BOOL *stop) {
-            
+        NSImage *image;
+        NSUInteger index = 0;
+        
+        while (image = (NSImage *)[self.imagesEnumerator nextObject]) {
             if (self.isCancelled) {
-                *stop = YES;
-                return;
+                break;
             }
+            
             
             image = [self scaleImage:image];
             
@@ -87,18 +90,25 @@
             
             CGImageSourceRef source = CGImageSourceCreateWithData(data, NULL);
             CGImageRef maskRef =  CGImageSourceCreateImageAtIndex(source, 0, NULL);
-            CGImageDestinationAddImage(destination, maskRef, (CFDictionaryRef)frameProperties);
+            CGImageDestinationAddImage(destination, maskRef, (__bridge CFDictionaryRef)frameProperties);
             
             CFRelease(source);
             CFRelease(maskRef);
             
             dispatch_sync(dispatch_get_main_queue(), ^{
                 if ([self.delegate respondsToSelector:@selector(gifExporter:processedImage:index:outOfTotal:)]) {
-                    [self.delegate gifExporter:self processedImage:image index:idx outOfTotal:total];
+                    [self.delegate gifExporter:self processedImage:image index:index outOfTotal:total];
                 }
             });
             
-        }];
+            index++;
+        }
+        
+        self.imagesEnumerator = nil;
+        
+        if (self.isCancelled) {
+            return;
+        }
         
         dispatch_sync(dispatch_get_main_queue(), ^{
             if ([self.delegate respondsToSelector:@selector(gifExporterIsProcessing:)]) {
@@ -106,14 +116,9 @@
             }
         });
         
-        self.images = nil;
-        
-        if (self.isCancelled) {
-            return;
-        }
         
         
-        CGImageDestinationSetProperties(destination, (CFDictionaryRef)gifProperties);
+        CGImageDestinationSetProperties(destination, (__bridge CFDictionaryRef)gifProperties);
         CGImageDestinationFinalize(destination);
         CFRelease(destination);
         
@@ -127,7 +132,7 @@
 
 - (void)cancel
 {
-    NSAssert(NO, @"Not implemented");
+    self.isCancelled = YES;
 }
 
 - (NSImage *)scaleImage:(NSImage *)image

@@ -7,8 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import "ImageDiscover.h"
-#import "VideoExtractor.h"
+#import "FolderLazyCollection.h"
+#import "VideoLazyCollection.h"
 #import "GifExporter.h"
 
 typedef NS_ENUM(NSUInteger, ButtonStatus) {
@@ -42,9 +42,9 @@ static NSUInteger maxNumberOfSections = 20;
 }
 
 
-- (GifExporter *)defaultExporter
+- (GifExporter *)defaultExporterWithLazyCollection:(AbstractLazyCollection *)lazyCollection
 {
-    GifExporter *exporter = [GifExporter new];
+    GifExporter *exporter = [[GifExporter alloc] initWithImagesEnumerator:lazyCollection];
     exporter.delegate = self;
     exporter.frameRate = 24;
 
@@ -68,21 +68,12 @@ static NSUInteger maxNumberOfSections = 20;
         NSURL *directory = [[panel URLs] firstObject];
         if (directory) {
             
-            if ([VideoExtractor canExportFromURL:directory]) {
-                [self.progressIndicator setDoubleValue:self.progressIndicator.maxValue];
-                [self.progressIndicator setIndeterminate:YES];
-                [self.progressIndicator startAnimation:self];
-                [VideoExtractor imagesFromVideoURL:directory framesPerSecond:24 complition:^(NSArray *images) {
-                    [self resetProgressIndicator];
-                    [self saveImages:images atURL:directory];
-                }];
-            }
-            else {
-                NSArray *images = [ImageDiscover imagesInFolder:directory];
-                [self saveImages:images atURL:directory];
+            AbstractLazyCollection *collection = [[VideoLazyCollection alloc] initWithVideoURL:directory framesPerSecond:12];
+            if (!collection) {
+                collection = [[FolderLazyCollection alloc] initWithFolderURL:directory];
             }
             
-           
+            [self saveImages:collection atURL:directory];
         }
         else {
             [self cancel];
@@ -90,12 +81,11 @@ static NSUInteger maxNumberOfSections = 20;
     }];
 }
 
-- (void)saveImages:(NSArray *)images atURL:(NSURL *)url
+- (void)saveImages:(AbstractLazyCollection *)images atURL:(NSURL *)url
 {
     [self.currentExporter cancel];
-    self.currentExporter = [self defaultExporter];
+    self.currentExporter = [self defaultExporterWithLazyCollection:images];
     
-    self.currentExporter.images = images;
     
     NSString *fileName = [NSString stringWithFormat:@"%@.gif", [url lastPathComponent]];
     NSURL *saveURL = [[url URLByDeletingLastPathComponent] URLByAppendingPathComponent:fileName];
