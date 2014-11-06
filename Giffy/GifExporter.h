@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+@class AbstractLazyCollection;
 @protocol GifExporterDelegate;
 
 @interface GifExporter : NSObject
 
-@property (nonatomic, copy) NSArray *images;
+@property (nonatomic, strong, readonly) AbstractLazyCollection *imagesEnumerator;
 @property (nonatomic, strong) NSURL *imagesLocation;
 @property (nonatomic, assign) NSUInteger frameRate;
 @property (nonatomic, strong) NSURL *saveLocation;
@@ -21,6 +22,8 @@
 
 @property (nonatomic, assign) id<GifExporterDelegate> delegate;
 
+
+- (instancetype)initWithImagesEnumerator:(AbstractLazyCollection *)enumerator;
 - (CGSize)originalFormat;
 
 - (void)execute;

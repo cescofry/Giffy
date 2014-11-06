@@ -7,7 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import "ImageDiscover.h"
+#import "FolderLazyCollection.h"
+#import "VideoLazyCollection.h"
 #import "GifExporter.h"
 
 typedef NS_ENUM(NSUInteger, ButtonStatus) {
@@ -41,9 +42,9 @@ static NSUInteger maxNumberOfSections = 20;
 }
 
 
-- (GifExporter *)defaultExporter
+- (GifExporter *)defaultExporterWithLazyCollection:(AbstractLazyCollection *)lazyCollection
 {
-    GifExporter *exporter = [GifExporter new];
+    GifExporter *exporter = [[GifExporter alloc] initWithImagesEnumerator:lazyCollection];
     exporter.delegate = self;
     exporter.frameRate = 24;
 
@@ -61,30 +62,38 @@ static NSUInteger maxNumberOfSections = 20;
     [panel setAllowsMultipleSelection:NO];
     [panel setAllowsOtherFileTypes:NO];
     [panel setCanChooseDirectories:YES];
-    [panel setCanChooseFiles:NO];
+    [panel setCanChooseFiles:YES];
     
     [panel beginWithCompletionHandler:^(NSInteger result) {
         NSURL *directory = [[panel URLs] firstObject];
         if (directory) {
-            NSArray *images = [ImageDiscover imagesInFolder:directory];
-
-            [self.currentExporter cancel];
-            self.currentExporter = [self defaultExporter];
-
-            self.currentExporter.images = images;
             
-            NSString *fileName = [NSString stringWithFormat:@"%@.gif", [directory lastPathComponent]];
-            NSURL *saveURL = [[directory URLByDeletingLastPathComponent] URLByAppendingPathComponent:fileName];
+            AbstractLazyCollection *collection = [[VideoLazyCollection alloc] initWithVideoURL:directory framesPerSecond:24];
+            if (!collection) {
+                collection = [[FolderLazyCollection alloc] initWithFolderURL:directory];
+            }
             
-            self.currentExporter.saveLocation = saveURL;
-            [self resetSlider];
-            
-            [self changeButtonStatus:ButtonStatusStart];
+            [self saveImages:collection atURL:directory];
         }
         else {
             [self cancel];
         }
     }];
+}
+
+- (void)saveImages:(AbstractLazyCollection *)images atURL:(NSURL *)url
+{
+    [self.currentExporter cancel];
+    self.currentExporter = [self defaultExporterWithLazyCollection:images];
+    
+    
+    NSString *fileName = [NSString stringWithFormat:@"%@.gif", [url lastPathComponent]];
+    NSURL *saveURL = [[url URLByDeletingLastPathComponent] URLByAppendingPathComponent:fileName];
+    
+    self.currentExporter.saveLocation = saveURL;
+    [self resetSlider];
+    
+    [self changeButtonStatus:ButtonStatusStart];
 }
 
 - (void)start

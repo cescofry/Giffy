@@ -13,7 +13,10 @@
 		9B88203D1A07A28E006992B1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9B88203B1A07A28E006992B1 /* MainMenu.xib */; };
 		9B8820491A07A28E006992B1 /* GiffyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B8820481A07A28E006992B1 /* GiffyTests.m */; };
 		9B8820541A07A2B3006992B1 /* GifExporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B8820531A07A2B3006992B1 /* GifExporter.m */; };
-		9B8820571A07A6C6006992B1 /* ImageDiscover.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B8820561A07A6C6006992B1 /* ImageDiscover.m */; };
+		9B8820571A07A6C6006992B1 /* FolderLazyCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B8820561A07A6C6006992B1 /* FolderLazyCollection.m */; };
+		9B88205A1A07FB76006992B1 /* VideoLazyCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B8820591A07FB76006992B1 /* VideoLazyCollection.m */; };
+		A5D79DD31A08D4E700FA9F19 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5D79DD21A08D4E700FA9F19 /* AVFoundation.framework */; };
+		A5D79DD61A08E28400FA9F19 /* AbstractLazyCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = A5D79DD51A08E28400FA9F19 /* AbstractLazyCollection.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,8 +42,13 @@
 		9B8820481A07A28E006992B1 /* GiffyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GiffyTests.m; sourceTree = "<group>"; };
 		9B8820521A07A2B3006992B1 /* GifExporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GifExporter.h; sourceTree = "<group>"; };
 		9B8820531A07A2B3006992B1 /* GifExporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GifExporter.m; sourceTree = "<group>"; };
-		9B8820551A07A6C6006992B1 /* ImageDiscover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDiscover.h; sourceTree = "<group>"; };
-		9B8820561A07A6C6006992B1 /* ImageDiscover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageDiscover.m; sourceTree = "<group>"; };
+		9B8820551A07A6C6006992B1 /* FolderLazyCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderLazyCollection.h; sourceTree = "<group>"; };
+		9B8820561A07A6C6006992B1 /* FolderLazyCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FolderLazyCollection.m; sourceTree = "<group>"; };
+		9B8820581A07FB76006992B1 /* VideoLazyCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoLazyCollection.h; sourceTree = "<group>"; };
+		9B8820591A07FB76006992B1 /* VideoLazyCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoLazyCollection.m; sourceTree = "<group>"; };
+		A5D79DD21A08D4E700FA9F19 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		A5D79DD41A08E28400FA9F19 /* AbstractLazyCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractLazyCollection.h; sourceTree = "<group>"; };
+		A5D79DD51A08E28400FA9F19 /* AbstractLazyCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractLazyCollection.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5D79DD31A08D4E700FA9F19 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,6 +73,7 @@
 		9B8820261A07A28E006992B1 = {
 			isa = PBXGroup;
 			children = (
+				A5D79DD21A08D4E700FA9F19 /* AVFoundation.framework */,
 				9B8820311A07A28E006992B1 /* Giffy */,
 				9B8820451A07A28E006992B1 /* GiffyTests */,
 				9B8820301A07A28E006992B1 /* Products */,
@@ -89,8 +99,12 @@
 				9B8820321A07A28E006992B1 /* Supporting Files */,
 				9B8820521A07A2B3006992B1 /* GifExporter.h */,
 				9B8820531A07A2B3006992B1 /* GifExporter.m */,
-				9B8820551A07A6C6006992B1 /* ImageDiscover.h */,
-				9B8820561A07A6C6006992B1 /* ImageDiscover.m */,
+				9B8820551A07A6C6006992B1 /* FolderLazyCollection.h */,
+				9B8820561A07A6C6006992B1 /* FolderLazyCollection.m */,
+				9B8820581A07FB76006992B1 /* VideoLazyCollection.h */,
+				9B8820591A07FB76006992B1 /* VideoLazyCollection.m */,
+				A5D79DD41A08E28400FA9F19 /* AbstractLazyCollection.h */,
+				A5D79DD51A08E28400FA9F19 /* AbstractLazyCollection.m */,
 			);
 			path = Giffy;
 			sourceTree = "<group>";
@@ -220,9 +234,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B8820571A07A6C6006992B1 /* ImageDiscover.m in Sources */,
+				9B8820571A07A6C6006992B1 /* FolderLazyCollection.m in Sources */,
+				A5D79DD61A08E28400FA9F19 /* AbstractLazyCollection.m in Sources */,
 				9B8820381A07A28E006992B1 /* main.m in Sources */,
 				9B8820361A07A28E006992B1 /* AppDelegate.m in Sources */,
+				9B88205A1A07FB76006992B1 /* VideoLazyCollection.m in Sources */,
 				9B8820541A07A2B3006992B1 /* GifExporter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -412,6 +428,7 @@
 				9B88204E1A07A28E006992B1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9B88204F1A07A28E006992B1 /* Build configuration list for PBXNativeTarget "GiffyTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +437,7 @@
 				9B8820511A07A28E006992B1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
