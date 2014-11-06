@@ -10,6 +10,7 @@
 #import "FolderLazyCollection.h"
 #import "VideoLazyCollection.h"
 #import "GifExporter.h"
+#import "AspectRatio.h"
 
 typedef NS_ENUM(NSUInteger, ButtonStatus) {
     ButtonStatusOpen,
@@ -91,7 +92,11 @@ static NSUInteger maxNumberOfSections = 20;
     NSURL *saveURL = [[url URLByDeletingLastPathComponent] URLByAppendingPathComponent:fileName];
     
     self.currentExporter.saveLocation = saveURL;
-    [self resetSlider];
+    [self.formatButton removeAllItems];
+    
+#error should be able to bind NSPopUpButton to NSPopUpCell and feed AspectRation instead of NSString
+    NSArray *items = [[AspectRatio allAspectRatiosFromSize:self.currentExporter.format] valueForKeyPath:@"stringValue"];
+    [self.formatButton addItemsWithTitles:items];
     
     [self changeButtonStatus:ButtonStatusStart];
 }
@@ -118,8 +123,7 @@ static NSUInteger maxNumberOfSections = 20;
 
 - (void)changeButtonStatus:(ButtonStatus)status
 {
-    [self.slider setEnabled:NO];
-    [self.formatTextField setEnabled:NO];
+    [self.formatButton setEnabled:NO];
     
     NSString *statusString;
     switch (status) {
@@ -129,9 +133,7 @@ static NSUInteger maxNumberOfSections = 20;
             break;
         case ButtonStatusStart:
             statusString = @"Start";
-            [self.slider setEnabled:YES];
-            [self.formatTextField setEnabled:YES];
-            [self sliderDidChange:self.slider];
+            [self.formatButton setEnabled:YES];
             break;
         case ButtonStatusCancel:
             statusString = @"Cancel";
@@ -171,22 +173,14 @@ static NSUInteger maxNumberOfSections = 20;
 
 #pragma mark - format
 
-- (void)resetSlider
+- (CGSize)sizeFromButtonString:(NSString *)string
 {
-    self.slider.maxValue = 2.0;
-    self.slider.minValue = 0.1;
-    self.slider.floatValue = 1.0;
-    
-    [self sliderDidChange:self.slider];
+    return CGSizeZero;
 }
 
-- (IBAction)sliderDidChange:(NSSlider *)sender
+- (IBAction)popUpButtonDidChange:(NSPopUpButton *)sender
 {
-    CGSize format = [self.currentExporter originalFormat];
-    CGSize newFormat = CGSizeMake(format.width * sender.floatValue, format.height * sender.floatValue);
-    self.formatTextField.stringValue = [NSString stringWithFormat:@"%.0f x %.0f", newFormat.width, newFormat.height];
-    
-    self.currentExporter.format = newFormat;
+    self.currentExporter.format = [self sizeFromButtonString:[sender.selectedCell stringValue]];
 }
 
 - (void)resetProgressIndicator

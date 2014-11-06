@@ -15,6 +15,7 @@
 		9B8820541A07A2B3006992B1 /* GifExporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B8820531A07A2B3006992B1 /* GifExporter.m */; };
 		9B8820571A07A6C6006992B1 /* FolderLazyCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B8820561A07A6C6006992B1 /* FolderLazyCollection.m */; };
 		9B88205A1A07FB76006992B1 /* VideoLazyCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B8820591A07FB76006992B1 /* VideoLazyCollection.m */; };
+		9B88205F1A0BED22006992B1 /* AspectRatio.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B88205E1A0BED22006992B1 /* AspectRatio.m */; };
 		A5D79DD31A08D4E700FA9F19 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5D79DD21A08D4E700FA9F19 /* AVFoundation.framework */; };
 		A5D79DD61A08E28400FA9F19 /* AbstractLazyCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = A5D79DD51A08E28400FA9F19 /* AbstractLazyCollection.m */; };
 /* End PBXBuildFile section */
@@ -46,6 +47,8 @@
 		9B8820561A07A6C6006992B1 /* FolderLazyCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FolderLazyCollection.m; sourceTree = "<group>"; };
 		9B8820581A07FB76006992B1 /* VideoLazyCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoLazyCollection.h; sourceTree = "<group>"; };
 		9B8820591A07FB76006992B1 /* VideoLazyCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoLazyCollection.m; sourceTree = "<group>"; };
+		9B88205D1A0BED22006992B1 /* AspectRatio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AspectRatio.h; sourceTree = "<group>"; };
+		9B88205E1A0BED22006992B1 /* AspectRatio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AspectRatio.m; sourceTree = "<group>"; };
 		A5D79DD21A08D4E700FA9F19 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A5D79DD41A08E28400FA9F19 /* AbstractLazyCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractLazyCollection.h; sourceTree = "<group>"; };
 		A5D79DD51A08E28400FA9F19 /* AbstractLazyCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractLazyCollection.m; sourceTree = "<group>"; };
@@ -105,6 +108,8 @@
 				9B8820591A07FB76006992B1 /* VideoLazyCollection.m */,
 				A5D79DD41A08E28400FA9F19 /* AbstractLazyCollection.h */,
 				A5D79DD51A08E28400FA9F19 /* AbstractLazyCollection.m */,
+				9B88205D1A0BED22006992B1 /* AspectRatio.h */,
+				9B88205E1A0BED22006992B1 /* AspectRatio.m */,
 			);
 			path = Giffy;
 			sourceTree = "<group>";
@@ -239,6 +244,7 @@
 				9B8820381A07A28E006992B1 /* main.m in Sources */,
 				9B8820361A07A28E006992B1 /* AppDelegate.m in Sources */,
 				9B88205A1A07FB76006992B1 /* VideoLazyCollection.m in Sources */,
+				9B88205F1A0BED22006992B1 /* AspectRatio.m in Sources */,
 				9B8820541A07A2B3006992B1 /* GifExporter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
