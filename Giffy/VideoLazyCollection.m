@@ -65,9 +65,14 @@
 - (NSImage *)imageAtTime:(CMTime)time
 {
     NSError *error = nil;
-    CGImageRef imgRef = [self.imageGenerator copyCGImageAtTime:time actualTime:NULL error:&error];
+    CMTime actualTime;
+    CGImageRef imgRef = [self.imageGenerator copyCGImageAtTime:time actualTime:&actualTime error:&error];
     NSImage *image = [[NSImage alloc] initWithCGImage:imgRef size:NSZeroSize];
     CGImageRelease(imgRef);
+    
+    if (error || time.value != actualTime.value) {
+        NSLog(@"Error: %@ [%lld | %lld]", error.debugDescription, time.value, actualTime.value);
+    }
     
     return image;
 }
