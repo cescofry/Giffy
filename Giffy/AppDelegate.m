@@ -182,7 +182,7 @@ static NSUInteger maxNumberOfSections = 20;
     else {
         [self.formatButton addItemWithTitle:@"--"];
         [self.formatButton setEnabled:NO];
-    }
+    }   
     
 }
 
