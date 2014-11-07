@@ -76,10 +76,10 @@
 		9B8820261A07A28E006992B1 = {
 			isa = PBXGroup;
 			children = (
-				A5D79DD21A08D4E700FA9F19 /* AVFoundation.framework */,
 				9B8820311A07A28E006992B1 /* Giffy */,
 				9B8820451A07A28E006992B1 /* GiffyTests */,
 				9B8820301A07A28E006992B1 /* Products */,
+				9B8820601A0D0FC7006992B1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -138,6 +138,14 @@
 				9B8820471A07A28E006992B1 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9B8820601A0D0FC7006992B1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A5D79DD21A08D4E700FA9F19 /* AVFoundation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
