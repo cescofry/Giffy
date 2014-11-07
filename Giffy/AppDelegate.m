@@ -25,6 +25,7 @@ static NSUInteger maxNumberOfSections = 20;
 
 @property (weak) IBOutlet NSWindow *window;
 @property (nonatomic, strong) GifExporter *currentExporter;
+@property (nonatomic, strong) NSArray *formats;
 
 @end
 
@@ -32,7 +33,7 @@ static NSUInteger maxNumberOfSections = 20;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
-    
+    [self resetFormats];
     [self resetProgressIndicator];
     [self changeButtonStatus:ButtonStatusOpen];
 
@@ -92,11 +93,7 @@ static NSUInteger maxNumberOfSections = 20;
     NSURL *saveURL = [[url URLByDeletingLastPathComponent] URLByAppendingPathComponent:fileName];
     
     self.currentExporter.saveLocation = saveURL;
-    [self.formatButton removeAllItems];
-    
-#error should be able to bind NSPopUpButton to NSPopUpCell and feed AspectRation instead of NSString
-    NSArray *items = [[AspectRatio allAspectRatiosFromSize:self.currentExporter.format] valueForKeyPath:@"stringValue"];
-    [self.formatButton addItemsWithTitles:items];
+    [self resetFormats];
     
     [self changeButtonStatus:ButtonStatusStart];
 }
@@ -173,14 +170,27 @@ static NSUInteger maxNumberOfSections = 20;
 
 #pragma mark - format
 
-- (CGSize)sizeFromButtonString:(NSString *)string
+- (void)resetFormats
 {
-    return CGSizeZero;
+    [self.formatButton removeAllItems];
+    
+    if (self.currentExporter.format.width > 0) {
+        self.formats = [AspectRatio allAspectRatiosFromSize:self.currentExporter.format];
+        [self.formatButton addItemsWithTitles:[self.formats valueForKeyPath:@"stringValue"]];
+        [self.formatButton setEnabled:YES];
+    }
+    else {
+        [self.formatButton addItemWithTitle:@"--"];
+        [self.formatButton setEnabled:NO];
+    }
+    
 }
+
 
 - (IBAction)popUpButtonDidChange:(NSPopUpButton *)sender
 {
-    self.currentExporter.format = [self sizeFromButtonString:[sender.selectedCell stringValue]];
+    AspectRatio *ratio = [self.formats objectAtIndex:[sender indexOfSelectedItem]];
+    self.currentExporter.format = [ratio size];
 }
 
 - (void)resetProgressIndicator

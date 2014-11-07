@@ -718,6 +718,9 @@
                                 </items>
                             </menu>
                         </popUpButtonCell>
+                        <connections>
+                            <action selector="popUpButtonDidChange:" target="Voe-Tx-rLC" id="AJ5-AD-8P7"/>
+                        </connections>
                     </popUpButton>
                 </subviews>
                 <constraints>
